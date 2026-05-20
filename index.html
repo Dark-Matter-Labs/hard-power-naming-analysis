@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naming Analysis — Hard Power Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=DM+Mono:ital,wght@0,400;1,400&family=Crimson+Pro:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ── Civic Palette ───────────────────────────────── */
+  :root {
+    --yellow:    #E2C03A;
+    --blue:      #3535AA;
+    --white:     #FFFFFF;
+    --teal:      #4DAA90;
+
+    /* functional aliases */
+    --ink:       #3535AA;
+    --paper:     #FFFFFF;
+    --ember:     #E2C03A;
+    --ember-dim: rgba(226,192,58,0.15);
+    --ground:    #4DAA90;
+
+    /* line weights */
+    --line-struct: 1.5px;
+    --line-tex:    0.75px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 15px; }
+
+  body {
+    margin: 0;
+    font-family: 'Crimson Pro', serif;
+    background: var(--paper);
+    color: var(--blue);
+    min-height: 100vh;
+  }
+
+  /* ── MASTHEAD ─────────────────────────────────────── */
+  .masthead {
+    background: var(--teal);
+    color: var(--white);
+    padding: 3.5rem 3rem 3rem;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    display: block;
+    line-height: 1;
+  }
+
+  .masthead::before { content: none; }
+
+  .masthead::after { content: none; }
+
+  .masthead-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+  }
+
+  .masthead h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    line-height: 1.2;
+    color: var(--highlight);
+    margin-bottom: 0.6rem;
+    max-width: 560px;
+  }
+
+  .masthead h1 span {
+    color: var(--yellow);
+  }
+
+  .masthead-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+    max-width: 460px;
+  }
+
+  /* ── TAB BAR ──────────────────────────────────────── */
+  .tab-bar {
+    background: var(--white);
+    border-bottom: var(--line-struct) solid var(--blue);
+    border-top: none;
+    margin-top: 0;
+    display: flex;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+
+  .tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.5rem;
+    color: rgba(53,53,170,0.45);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: var(--line-struct) solid transparent;
+    margin-bottom: calc(-1 * var(--line-struct));
+    white-space: nowrap;
+    transition: color 0.15s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .tab:hover { color: var(--ink); }
+
+  .tab.active {
+    color: var(--blue);
+    border-bottom-color: var(--yellow);
+  }
+
+  /* ── LAYOUT ───────────────────────────────────────── */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  .panel { display: none; animation: appear 0.2s ease; }
+  .panel.active { display: block; }
+
+  @keyframes appear {
+    from { opacity: 0; transform: translateY(3px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION LABEL ────────────────────────────────── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 0.6rem;
+  }
+
+  .section-rule {
+    width: 100%;
+    height: var(--line-struct);
+    background: var(--yellow);
+    margin-bottom: 1.75rem;
+  }
+
+  /* ── TENSION BLOCK ────────────────────────────────── */
+  .tension-block {
+    background: var(--blue);
+    padding: 2rem 2.25rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .tension-block::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px; height: 100%;
+    background: var(--yellow);
+  }
+
+  .tension-block p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #FFFFFF;
+    font-style: italic;
+  }
+
+  /* ── PROSE ────────────────────────────────────────── */
+  .prose {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--blue);
+    margin-bottom: 1.5rem;
+    max-width: 680px;
+  }
+
+  /* ── STRATEGIC READ BOX ───────────────────────────── */
+  .strat-box {
+    border: var(--line-struct) solid var(--blue);
+    margin-bottom: 2.5rem;
+  }
+
+  .strat-header {
+    background: var(--blue);
+    color: var(--highlight);
+    padding: 0.6rem 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .strat-body {
+    padding: 1.5rem 1.5rem 1.25rem;
+  }
+
+  .strat-body p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.98rem;
+    line-height: 1.75;
+    color: var(--blue);
+    margin-bottom: 1rem;
+  }
+
+  .strat-body p:last-child { margin-bottom: 0; }
+
+  /* ── COMPARE GRID ─────────────────────────────────── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: var(--line-struct) solid var(--blue);
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 580px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .name-col:first-child { border-right: none; border-bottom: var(--line-struct) solid var(--ink); }
+  }
+
+  .name-col {
+    padding: 1.5rem 1.5rem 1.75rem;
+  }
+
+  .name-col:first-child {
+    border-right: var(--line-struct) solid var(--blue);
+  }
+
+  .col-flag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(53,53,170,0.45);
+    margin-bottom: 0.4rem;
+  }
+
+  .col-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: var(--line-tex) solid var(--blue);
+  }
+
+  .col-name.ember { color: var(--teal); }
+
+  .list-head {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(53,53,170,0.5);
+    margin-bottom: 0.5rem;
+    margin-top: 1.1rem;
+  }
+
+  .list-head:first-of-type { margin-top: 0; }
+
+  .item-list {
+    list-style: none;
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .item-list li {
+    padding: 0.35rem 0 0.35rem 1.1rem;
+    position: relative;
+    border-bottom: var(--line-tex) solid rgba(53,53,170,0.1);
+  }
+
+  .item-list li:last-child { border-bottom: none; }
+
+  .item-list li::before {
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+  }
+
+  .for-list li::before    { content: '+'; color: var(--teal); font-weight: 600; }
+  .against-list li::before { content: '–'; color: #C0873A; }
+
+  /* ── VOICES ───────────────────────────────────────── */
+  .voices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0;
+    border: var(--line-struct) solid var(--blue);
+    margin-bottom: 2.5rem;
+  }
+
+  .voice-card {
+    padding: 1.4rem 1.4rem 1.25rem;
+    border-right: var(--line-tex) solid var(--blue);
+    border-bottom: var(--line-tex) solid var(--blue);
+    position: relative;
+  }
+
+  /* hatching top-right — signals open/constrained */
+  .voice-card.constrained::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 24px; height: 24px;
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--ember) 0px,
+      var(--ember) 0.75px,
+      transparent 0.75px,
+      transparent 5px
+    );
+  }
+
+  .voice-quote {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--blue);
+    margin-bottom: 1rem;
+  }
+
+  .voice-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 0.15rem;
+  }
+
+  .voice-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(53,53,170,0.5);
+    line-height: 1.5;
+  }
+
+  .voice-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    margin-top: 0.6rem;
+    border: var(--line-tex) solid currentColor;
+  }
+
+  .tag-risk    { color: var(--blue); border-color: var(--blue); background: rgba(53,53,170,0.08); }
+  .tag-open    { color: var(--teal); border-color: var(--teal); }
+  .tag-friction { color: rgba(53,53,170,0.6); border-color: rgba(53,53,170,0.3); }
+
+  /* ── TAGLINE ROWS ─────────────────────────────────── */
+  .tagline-list {
+    border: var(--line-struct) solid var(--blue);
+    margin-bottom: 2rem;
+  }
+
+  .tagline-row {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom: var(--line-tex) solid var(--ink);
+    align-items: flex-start;
+  }
+
+  .tagline-row:last-child { border-bottom: none; }
+
+  .tl-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    border: var(--line-tex) solid currentColor;
+  }
+
+  .badge-current { color: #8B6200; background: rgba(226,192,58,0.2); border-color: var(--yellow); }
+  .badge-option  { color: var(--teal); border-color: var(--teal); }
+  .badge-dropped { color: rgba(25,38,64,0.35); border-color: rgba(25,38,64,0.2); }
+
+  .tl-text {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.45;
+    margin-bottom: 0.35rem;
+  }
+
+  .tl-note {
+    font-family: 'DM Mono', monospace;
+    font-style: italic;
+    font-size: 0.65rem;
+    color: rgba(53,53,170,0.5);
+    line-height: 1.6;
+  }
+
+  /* ── FLAG ITEMS ───────────────────────────────────── */
+  .flag-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: var(--line-struct) solid var(--blue);
+    margin-bottom: 2rem;
+  }
+
+  .flag-item {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: var(--line-tex) solid var(--ink);
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .flag-item:last-child { border-bottom: none; }
+
+  .flag-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px; height: 100%;
+  }
+
+  .flag-item.risk::before   { background: var(--yellow); }
+  .flag-item.field::before  { background: var(--teal); }
+  .flag-item.amber::before  { background: var(--blue); }
+
+  .flag-n {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(53,53,170,0.25);
+    flex-shrink: 0;
+    padding-top: 0.1rem;
+    min-width: 1.8rem;
+  }
+
+  .flag-body {}
+
+  .flag-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.82rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .flag-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: rgba(53,53,170,0.75);
+  }
+
+  /* ── ANNOTATION BLOCK ─────────────────────────────── */
+  .annotation {
+    font-family: 'DM Mono', monospace;
+    font-style: italic;
+    font-size: 0.65rem;
+    color: rgba(53,53,170,0.45);
+    line-height: 1.65;
+    margin-top: 1.25rem;
+    padding-top: 0.75rem;
+    border-top: var(--line-tex) dashed rgba(53,53,170,0.3);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-meta">internal sense-making document · May 2026 · Hard Power Project</div>
+  <h1>What should we call this?<br><span>A naming analysis</span></h1>
+  <div class="masthead-sub">Hard Power Project vs Common Power</div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab(event,'overview')">Overview</button>
+  <button class="tab" onclick="switchTab(event,'compare')">The two names</button>
+  <button class="tab" onclick="switchTab(event,'voices')">Voices in the room</button>
+  <button class="tab" onclick="switchTab(event,'tagline')">The tagline problem</button>
+  <button class="tab" onclick="switchTab(event,'flags')">Things to flag</button>
+</div>
+
+<div class="main">
+
+  <!-- OVERVIEW -->
+  <div class="panel active" id="panel-overview">
+
+    <div class="tension-block">
+      <p>Hard Power Project has real energy and communicates the stakes. But it carries pre-loaded meaning that actively conflicts with the project's purpose — and two of the most critical funders are either hostile to it or friction-generating. Common Power resolves that problem but risks sounding too gentle for a project that wants to blow doors off.</p>
+    </div>
+
+    <div class="section-label">Where the group has landed</div>
+    <div class="section-rule"></div>
+
+    <p class="prose">Session 4 agreed Hard Power Project as a working title, with the logic that intentional friction filters for the right people: those who grasp how precarious the situation is. The tagline was flagged as equally critical as the name. Since then, Rich's funder testing has complicated the picture significantly.</p>
+
+    <div class="strat-box">
+      <div class="strat-header">Strategic read</div>
+      <div class="strat-body">
+        <p>The group's instinct is defensible. Intentional friction can work. But there is a meaningful difference between friction that attracts the right people and friction that creates an immediate rejection response in the room you most need to win over.</p>
+        <p>Halima Khan is not a fringe view. She chairs the group of funder CEOs the project needs to convene. Her response to the name is not a persuasion problem to be managed with a better tagline. It is a structural signal that the name may cost more than the friction earns.</p>
+        <p>This does not resolve cleanly in either direction. But the team should go into the QCF meeting on 27 May having made a deliberate choice — not drifting forward on a working title that was never formally decided.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARE -->
+  <div class="panel" id="panel-compare">
+    <div class="section-label">All options considered</div>
+    <div class="section-rule"></div>
+
+    <div class="compare-grid">
+      <div class="name-col">
+        <div class="col-flag">Option A — current working title</div>
+        <div class="col-name ember">Hard Power Project</div>
+
+        <div class="list-head">For</div>
+        <ul class="item-list for-list">
+          <li>Communicates serious intent immediately. No ambiguity about stakes.</li>
+          <li>Intentional friction filters for the right people: those who grasp how precarious the problem is.</li>
+          <li>Adding "Project" creates useful distance from the geopolitical definition and signals time-boundedness.</li>
+          <li>Indy: soft names attract soft rooms. If it's crap you learn quickly and iterate.</li>
+          <li>A strong tagline can carry interpretation and sharpen the name's meaning.</li>
+          <li>Clare: naming it, then killing it — the absence of the name at wind-down also becomes useful.</li>
+        </ul>
+
+        <div class="list-head">Against</div>
+        <ul class="item-list against-list">
+          <li>"Hard power" has a well-established definition: military force and economic coercion. Utterly at odds with what this project does.</li>
+          <li>Halima Khan: "I really don't like hard power."</li>
+          <li>Tom Steinberg: will put off people spending time protesting.</li>
+          <li>Alex: you will spend a lot of time saying "no, no, it's not that" — a waste given the pace required.</li>
+          <li>People like Alex Karp are now using the term. Gives the ick.</li>
+          <li>Rich: generating too much friction too quickly. Will need a very good reason to proceed.</li>
+        </ul>
+      </div>
+
+      <div class="name-col">
+        <div class="col-flag">Option B</div>
+        <div class="col-name">Common Power</div>
+
+        <div class="list-head">For</div>
+        <ul class="item-list for-list">
+          <li>Locates the project in ground-up collaboration rather than coercive force.</li>
+          <li>Readily understood without a lengthy explainer.</li>
+          <li>Situates the work in a commons framing — scope for cross-sector alignment (knowledge, food, creative commons).</li>
+          <li>Keeps "power" in the name, important for power-literacy in the field.</li>
+          <li>Less likely to trigger a rejection response in funder meetings.</li>
+          <li>Halima Khan: "much better than hard power."</li>
+        </ul>
+
+        <div class="list-head">Against</div>
+        <ul class="item-list against-list">
+          <li>Risks sounding too gentle for a project with sharp intent.</li>
+          <li>Clare: sounds a bit nice. May create a false impression of what is actually being done.</li>
+          <li>Indy: may attract "egalitarian VC types" who can turn good projects bad.</li>
+          <li>Vague. Does not communicate urgency or structural seriousness.</li>
+          <li>A US organisation uses a similar name. Not a deal-breaker but worth noting.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; border: var(--line-struct) solid var(--blue); border-top: none; margin-bottom: 2.5rem;">
+      <div class="name-col" style="border-right: var(--line-struct) solid var(--blue);">
+        <div class="col-flag">Option C — floated session 3</div>
+        <div class="col-name" style="border-bottom: var(--line-tex) solid var(--blue); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">Hard Power <span style="font-weight:300; font-size:0.9rem;">(no "Project")</span></div>
+
+        <div class="list-head">For</div>
+        <ul class="item-list for-list">
+          <li>Simpler. More direct. Indy: good names are simple.</li>
+          <li>Speaks clearly to the limitations of the current movement — insufficiently hard.</li>
+        </ul>
+
+        <div class="list-head">Against</div>
+        <ul class="item-list against-list">
+          <li>Without "Project" it loses the time-limited signal that distances it from the geopolitical definition.</li>
+          <li>Harder to fund — "hard power" alone sounds more confrontational to institutional funders.</li>
+          <li>Clare: missing a hook or object.</li>
+        </ul>
+      </div>
+
+      <div class="name-col">
+        <div class="col-flag">Option D — floated session 3</div>
+        <div class="col-name" style="border-bottom: var(--line-tex) solid var(--blue); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">Civic Power <span style="font-weight:300; font-size:0.9rem;">(rejected)</span></div>
+
+        <div class="list-head">For</div>
+        <ul class="item-list for-list">
+          <li>Softer. Removes friction with funders entirely.</li>
+          <li>Already familiar language in the philanthropic space.</li>
+        </ul>
+
+        <div class="list-head">Against</div>
+        <ul class="item-list against-list">
+          <li>Already taken — QCF funds the Civic Power Fund. Indy: "we can't use civic power."</li>
+          <li>Does not differentiate this project from existing work in the field at all.</li>
+          <li>Loses the point entirely. The whole argument is that civic is insufficient.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="border: var(--line-struct) solid var(--blue); margin-bottom: 2.5rem;">
+      <div style="background: var(--blue); color: white; padding: 0.6rem 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;">Option E — floated session 3, not developed</div>
+      <div style="padding: 1.25rem 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div>
+          <div class="col-flag" style="margin-bottom: 0.4rem;">Verbing the name</div>
+          <p style="font-family: 'Crimson Pro', serif; font-size: 0.92rem; line-height: 1.65; color: var(--blue);">Indy floated intentionally using a verb rather than a noun — "hard powering," "folk powering" — so the name describes an action rather than an object. The logic: avoids creating a brand identity that can be attacked or co-opted, keeps the focus on doing rather than being. Not developed further.</p>
+        </div>
+        <div>
+          <div class="col-flag" style="margin-bottom: 0.4rem;">Ephemeral / unnamed</div>
+          <p style="font-family: 'Crimson Pro', serif; font-size: 0.92rem; line-height: 1.65; color: var(--blue);">Mara raised the possibility of resisting naming altogether — operating with intentional obscurity, sharing details on a need-to-know basis. Indy's response: viable for a persistent institution, but for a time-limited one, a name that can be killed is more useful than no name. Not pursued.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOICES -->
+  <div class="panel" id="panel-voices">
+    <div class="section-label">From the transcripts and funder testing</div>
+    <div class="section-rule"></div>
+
+    <div class="voices-grid">
+      <div class="voice-card constrained">
+        <div class="voice-quote">I really don't like hard power. Agree that common power is potentially vague but much better than hard power.</div>
+        <div class="voice-name">Halima Khan</div>
+        <div class="voice-role">CEO, Paul Hamlyn Foundation<br>Chairs the group of funder CEOs potentially supporting this work</div>
+        <span class="voice-tag tag-risk">Critical funder</span>
+      </div>
+
+      <div class="voice-card">
+        <div class="voice-quote">I like the punchy aspect of Hard Power Project but I suspect it will put off people who are spending a lot of time protesting.</div>
+        <div class="voice-name">Tom Steinberg</div>
+        <div class="voice-role">Modern Grantmaking<br>Leading coordination of UK funds in the democratic resilience space</div>
+        <span class="voice-tag tag-friction">Mixed</span>
+      </div>
+
+      <div class="voice-card constrained">
+        <div class="voice-quote">If you have a tricky name you just spend a lot of time saying no, no, it's not that, it's this. That's a waste of time given the spirit of moving quickly.</div>
+        <div class="voice-name">Alex</div>
+        <div class="voice-role">Working group</div>
+        <span class="voice-tag tag-friction">Friction concern</span>
+      </div>
+
+      <div class="voice-card">
+        <div class="voice-quote">Common power sounds like something you could ignore, which may also be useful — it doesn't sound as tough as what we actually intend to do.</div>
+        <div class="voice-name">Clare</div>
+        <div class="voice-role">Working group</div>
+        <span class="voice-tag tag-open">Open</span>
+      </div>
+
+      <div class="voice-card">
+        <div class="voice-quote">I instinctively prefer Hard Power Project. Common Power to me sounds like we'll just attract egalitarian VC people who can turn every good project bad.</div>
+        <div class="voice-name">Indy</div>
+        <div class="voice-role">Working group</div>
+        <span class="voice-tag tag-open">Leans HP</span>
+      </div>
+
+      <div class="voice-card constrained">
+        <div class="voice-quote">It's generating too much friction too quickly. We will need a very good reason to proceed with Hard Power Project.</div>
+        <div class="voice-name">Rich</div>
+        <div class="voice-role">Working group<br>Note after funder testing, 20 May 2026</div>
+        <span class="voice-tag tag-risk">Leans CP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAGLINE -->
+  <div class="panel" id="panel-tagline">
+    <div class="section-label">The unresolved problem</div>
+    <div class="section-rule"></div>
+
+    <p class="prose">The tagline question is arguably as important as the name itself and has not been closed. Multiple people said a strong strapline could rescue either option. No tagline has been formally agreed. This gap should be closed at the same time as the name decision.</p>
+
+    <div class="section-label" style="margin-top: 1.5rem;">If the name is Hard Power Project</div>
+    <div style="width:100%; height: var(--line-struct); background: var(--yellow); margin-bottom: 1.5rem;"></div>
+
+    <div class="tagline-list" style="margin-bottom: 2rem;">
+      <div class="tagline-row">
+        <span class="tl-badge badge-current">Current</span>
+        <div>
+          <div class="tl-text">Building civic power for citizens to hold the world to account</div>
+          <div class="tl-note">[problem] says "civic power" not "hard power" — quiet incoherence at the top of the document. "The world" is also too large for a UK-focused, time-limited intervention.</div>
+        </div>
+      </div>
+      <div class="tagline-row">
+        <span class="tl-badge badge-option">Floated</span>
+        <div>
+          <div class="tl-text">Building the hard power of citizens to hold the world to account</div>
+          <div class="tl-note">Indy's in-session sketch. Centres citizens, keeps "hard power" in the tagline so the name earns its keep. Still has the "world" problem.</div>
+        </div>
+      </div>
+      <div class="tagline-row">
+        <span class="tl-badge badge-option">Floated</span>
+        <div>
+          <div class="tl-text">Collapse-resistant civic infrastructure</div>
+          <div class="tl-note">Charlie (Absurd Intelligence). Strong and differentiated. Does not resolve the name–tagline tension but communicates structural seriousness independently.</div>
+        </div>
+      </div>
+      <div class="tagline-row">
+        <span class="tl-badge badge-dropped">Dropped</span>
+        <div>
+          <div class="tl-text">Building the civic infrastructure for citizens to hold the world to account</div>
+          <div class="tl-note">Original from the naming doc. "The world" problem. Not sharp enough to carry the weight the name requires.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top: 0.5rem;">If the name is Common Power</div>
+    <div style="width:100%; height: var(--line-struct); background: var(--yellow); margin-bottom: 1.5rem;"></div>
+
+    <div class="tagline-list" style="margin-bottom: 2rem;">
+      <div class="tagline-row">
+        <span class="tl-badge badge-option">Option</span>
+        <div>
+          <div class="tl-text">Collapse-resistant civic infrastructure</div>
+          <div class="tl-note">Does sharpening work for Common Power — adds urgency and structural weight the name itself lacks.</div>
+        </div>
+      </div>
+      <div class="tagline-row">
+        <span class="tl-badge badge-option">Option</span>
+        <div>
+          <div class="tl-text">Building the hard power of citizens to hold the world to account</div>
+          <div class="tl-note">Keeps "hard power" in the tagline even if the name softens. Signals that Common Power is not gentle — it has hard edges. Resolves the softness risk.</div>
+        </div>
+      </div>
+      <div class="tagline-row">
+        <span class="tl-badge badge-option">Option</span>
+        <div>
+          <div class="tl-text">Enforceable, resourced, institutionally capable</div>
+          <div class="tl-note">Drawn from the project intro text. Precise and differentiating. Works as a strapline that signals sharp intent without confrontational language.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strat-box">
+      <div class="strat-header">The structural problem</div>
+      <div class="strat-body">
+        <p>The name says Hard Power. The current tagline says civic power. A reader will notice and wonder which one describes the project. This is not accidental — civic is softer, more fundable — but it creates incoherence at the top of the document that the body text then has to resolve.</p>
+        <p>If Hard Power Project stays, the tagline needs to earn the name rather than soften it. If Common Power becomes the name, the tagline needs to do sharpening work rather than softening.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLAGS -->
+  <div class="panel" id="panel-flags">
+    <div class="section-label">For the team discussion</div>
+    <div class="section-rule"></div>
+
+    <div class="flag-list">
+      <div class="flag-item risk">
+        <div class="flag-n">01</div>
+        <div class="flag-body">
+          <div class="flag-title">Halima Khan is not a persuasion problem</div>
+          <div class="flag-text">Her response to the name is a structural signal, not a friction to manage with a better tagline. She chairs the group of funder CEOs the project needs. The team should decide whether they are designing for her room or around it — not assume the tagline resolves it.</div>
+        </div>
+      </div>
+
+      <div class="flag-item field">
+        <div class="flag-n">02</div>
+        <div class="flag-body">
+          <div class="flag-title">The tagline has not been decided</div>
+          <div class="flag-text">Multiple people said the tagline is as important as the name. No tagline has been formally agreed. The name decision and the tagline decision should be made together. Closing one without the other leaves the same problem open.</div>
+        </div>
+      </div>
+
+      <div class="flag-item amber">
+        <div class="flag-n">03</div>
+        <div class="flag-body">
+          <div class="flag-title">Should Alice Garton be sounded out before 27 May?</div>
+          <div class="flag-text">Rich's open question: should Alice Garton at QCF be asked about the name before the meeting? Worth a quick yes or no from the group. If she has a strong reaction either way, better to know in advance.</div>
+        </div>
+      </div>
+
+      <div class="flag-item field">
+        <div class="flag-n">04</div>
+        <div class="flag-body">
+          <div class="flag-title">The succession idea is worth adopting as policy</div>
+          <div class="flag-text">Clare raised the possibility of having two or three names ready to rotate if the project attracts unwanted attention. This is a sensible precaution regardless of which name is chosen. Worth adopting deliberately rather than leaving as an informal option.</div>
+        </div>
+      </div>
+
+      <div class="flag-item risk">
+        <div class="flag-n">05</div>
+        <div class="flag-body">
+          <div class="flag-title">The working title is doing more work than it should</div>
+          <div class="flag-text">Session 4 agreed Hard Power Project as a working title, with the implicit assumption it could be revisited. Rich's funder testing changes the urgency of that revisit. The team meets QCF on 27 May. Going in with an unresolved working title is a choice — but it should be a deliberate one.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function switchTab(e, id) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    e.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
